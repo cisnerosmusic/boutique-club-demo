@@ -192,11 +192,18 @@ img { max-width: 100%; height: auto; display: block; }
 .solo-miembros svg { width: 16px; height: 16px; color: var(--peri); }
 
 /* ---------- Tarjeta física ---------- */
-.carnets { display: grid; gap: 22px; justify-items: center; }
-@media (min-width: 900px) { .carnets { grid-template-columns: 1fr 1fr; } }
+/* Medida ISO/IEC 7810 ID-1, la de las tarjetas de banco: 85,60 x 53,98 mm,
+   esquinas de 3,18 mm. Todo dentro se mide en cqw (1 cqw = 0,856 mm de tarjeta),
+   así las dos caras son idénticas y escalan como una tarjeta impresa.
+   Zonas libres para el futuro: en el anverso, la del chip (ISO 7816-2:
+   12-23 cqw desde la izquierda, 22,5-33,5 cqw desde arriba); en el reverso,
+   la banda magnética (ISO 7811: franja superior, 6,5-21,5 cqw desde arriba). */
+.carnets { display: grid; gap: 28px; max-width: 420px; margin-inline: auto; }
+@media (min-width: 900px) { .carnets { grid-template-columns: 1fr 1fr; max-width: 880px; gap: 40px; } }
+.cara { width: 100%; container-type: inline-size; }
 .carnet {
-    width: min(100%, 420px); aspect-ratio: 1.586; border-radius: 18px;
-    padding: 22px 24px; display: flex; flex-direction: column; justify-content: space-between;
+    width: 100%; aspect-ratio: 85.6 / 53.98; border-radius: 3.7cqw; overflow: hidden;
+    padding: 5.5cqw 6cqw; display: flex; flex-direction: column; justify-content: space-between;
     background:
         radial-gradient(120% 90% at 100% 0%, rgba(43, 57, 144, 0.45) 0%, transparent 55%),
         radial-gradient(90% 80% at 0% 100%, rgba(43, 57, 144, 0.18) 0%, transparent 60%),
@@ -204,20 +211,22 @@ img { max-width: 100%; height: auto; display: block; }
     border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
 }
-.carnet-arriba { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
-.carnet-mono { width: 40px; height: 40px; border-radius: 9px; }
-.carnet-club { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.32em; color: var(--white); text-align: right; }
-.carnet-club small { display: block; font-size: 0.56rem; font-weight: 500; letter-spacing: 0.14em; color: var(--gray); margin-top: 4px; }
-.carnet-num { font-size: clamp(2.2rem, 11vw, 3rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
-.carnet-rol { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--peri); margin-bottom: 4px; }
-.carnet-abajo { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
-.carnet-carro { font-size: 0.85rem; color: var(--gray-light); text-align: right; }
-.carnet-reverso { flex-direction: row; align-items: center; gap: 18px; }
-.carnet-qr { background: var(--white); border-radius: 10px; padding: 6px; width: 38%; flex-shrink: 0; }
+.carnet-arriba { display: flex; justify-content: space-between; align-items: flex-start; gap: 3cqw; }
+.carnet-mono { width: 10cqw; height: 10cqw; border-radius: 2.2cqw; }
+.carnet-club { font-size: 2.9cqw; font-weight: 700; letter-spacing: 0.32em; color: var(--white); text-align: right; line-height: 1.3; }
+.carnet-club small { display: block; font-size: 2.1cqw; font-weight: 500; letter-spacing: 0.14em; color: var(--gray); margin-top: 1cqw; }
+.carnet-num { font-size: 12cqw; font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
+.carnet-rol { font-size: 2.6cqw; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--peri); margin-bottom: 1cqw; }
+.carnet-abajo { display: flex; justify-content: space-between; align-items: flex-end; gap: 3cqw; }
+.carnet-carro { font-size: 3.3cqw; color: var(--gray-light); text-align: right; line-height: 1.35; }
+/* Reverso: el contenido empieza por debajo de la franja de la banda magnética */
+.carnet-reverso { flex-direction: row; align-items: center; justify-content: flex-start; gap: 5cqw; padding-top: 23cqw; }
+.carnet-qr { background: var(--white); border-radius: 2cqw; padding: 1.4cqw; width: 30cqw; flex-shrink: 0; }
 .carnet-qr img { width: 100%; height: auto; }
-.carnet-texto { display: flex; flex-direction: column; gap: 8px; }
-.carnet-hola { font-size: clamp(1rem, 4.2vw, 1.2rem); font-weight: 700; line-height: 1.25; }
-.carnet-pie { font-size: 0.66rem; color: var(--gray); letter-spacing: 0.04em; }
+.carnet-texto { display: flex; flex-direction: column; gap: 1.6cqw; }
+.carnet-hola { font-size: 4.6cqw; font-weight: 700; line-height: 1.2; }
+.carnet .nota { font-size: 3.1cqw; line-height: 1.4; }
+.carnet-pie { font-size: 2.4cqw; color: var(--gray); letter-spacing: 0.04em; }
 .etiqueta-cara { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gray); text-align: center; margin-top: 10px; }
 
 /* ---------- Bienvenida ---------- */
