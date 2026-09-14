@@ -349,4 +349,56 @@ img { max-width: 100%; height: auto; display: block; }
 .zonas-lista li[data-zona] { cursor: pointer; }
 .pila { display: grid; gap: 16px; }
 
+/* ---------- Idioma (EN primero, ES segundo) ---------- */
+.cab-der { display: flex; align-items: center; gap: 22px; }
+.idioma { display: flex; gap: 2px; }
+.idioma button {
+    font-family: var(--font-main); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em;
+    color: var(--gray); background: none; border: 0; border-radius: 8px;
+    min-width: 44px; min-height: 44px; cursor: pointer; transition: var(--transition-fast);
+}
+.idioma button:hover { color: var(--white); }
+.idioma button[aria-pressed="true"] { color: var(--white); background: rgba(255, 255, 255, 0.08); }
+
+/* ---------- Comodidad: al alcance del pulgar, lo importante primero ---------- */
+@media (max-width: 759px) { .botones > .btn { flex: 1 1 100%; } }
+html.dentro { font-size: 106.25%; } /* dentro del club, todo un punto más grande */
+.saludo { font-size: 1.4rem; font-weight: 600; letter-spacing: -0.01em; margin-top: 22px; min-height: 1.5em; }
+@media (prefers-reduced-motion: no-preference) {
+    .saludo { opacity: 0; transition: opacity 0.9s ease 0.15s; }
+    .saludo.visible { opacity: 1; }
+}
+.resumen { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; list-style: none; }
+.resumen a.pill { display: inline-flex; align-items: center; min-height: 40px; padding: 8px 14px; font-size: 0.7rem; }
+.de-vuelta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 16px; margin-top: 18px; padding: 12px 18px; }
+.de-vuelta p { font-weight: 600; }
+.de-vuelta a { color: var(--peri); font-weight: 600; min-height: 44px; display: inline-flex; align-items: center; }
+.fundador { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+.pas-cab .foto img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+
+/* ---------- Distinción, en voz baja y solo dentro ----------
+   Afuera (sitio, portada, tarjeta, bienvenida) la luz recorre el borde: la linterna.
+   Adentro la luz está sobre la superficie: un reflejo lento, como sobre un carro
+   recién tratado; plata para lo que es del miembro; un halo índigo apenas visible. */
+html.dentro body {
+    background:
+        radial-gradient(110% 36rem at 50% -8rem, rgba(43, 57, 144, 0.16), transparent 70%) no-repeat,
+        var(--black);
+}
+.plata {
+    background: linear-gradient(120deg, #ffffff 0%, #c9ccd4 38%, #ffffff 55%, #b8bcc6 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: #d4d4d4;
+}
+.brillo { position: relative; overflow: hidden; }
+.brillo::after {
+    content: ''; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+    background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.08) 47%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.08) 53%, transparent 62%);
+    transform: translateX(-120%);
+}
+@media (prefers-reduced-motion: no-preference) {
+    .brillo::after { animation: brillo 11s ease-in-out 1.5s infinite; }
+}
+@keyframes brillo { 0% { transform: translateX(-120%); } 16% { transform: translateX(120%); } 100% { transform: translateX(120%); } }
+
 [hidden] { display: none !important; }

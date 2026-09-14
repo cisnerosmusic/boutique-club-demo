@@ -1,14 +1,17 @@
 /* Boutique Club (demo): lo único dinámico de la demo.
    - La elección de cómo aparecer se guarda en este navegador (localStorage).
-   - El muro se pinta desde datos.js.
+   - El muro, el saludo y los textos que dependen de la elección se pintan aquí,
+     en la lengua activa (i18n.js), y se repintan al cambiar de lengua.
    - El mapa del pasaporte resalta la zona tocada.
-   - La linterna del sitio se enciende al entrar en vista. */
+   - La linterna del sitio se enciende al entrar en vista (solo en la puerta). */
 (function () {
   'use strict';
   var CLAVE = 'bc-demo-eleccion';
   var CLAVE_SUG = 'bc-demo-sin-sugerencias';
   var raiz = document.body.getAttribute('data-raiz') || '';
   var BC = window.BC || { yo: {}, miembros: [] };
+  var L = window.BC_LANG || { t: function (k) { return k; } };
+  function t(k, v) { return L.t(k, v); }
 
   function leer(clave) {
     try { var v = localStorage.getItem(clave); return v ? JSON.parse(v) : null; } catch (e) { return null; }
@@ -20,7 +23,7 @@
   function nombreVisible(e) {
     if (!e) return null;
     if (e.modo === 'nombre') return BC.yo.nombre;
-    if (e.modo === 'alias') return e.alias || ('Miembro #' + BC.yo.numero);
+    if (e.modo === 'alias') return e.alias || t('ficha.miembro', { n: BC.yo.numero });
     return null;
   }
   function nodo(tag, clase, texto) {
@@ -31,19 +34,19 @@
   }
 
   function ficha(m, esTu) {
-    var art = nodo('article', 'ficha' + (esTu ? ' es-tu' : ''));
+    var art = nodo('article', 'ficha' + (esTu ? ' es-tu brillo' : ''));
     var img = nodo('img');
     img.src = raiz + m.foto;
-    img.alt = m.carro + ' ' + m.color + ' de ' + m.nombre;
+    img.alt = t('ficha.alt', { nombre: m.nombre, carro: m.carro, color: t('color.' + m.color) });
     img.loading = 'lazy';
     art.appendChild(img);
-    if (esTu) art.appendChild(nodo('span', 'marca-tu', 'Tú'));
+    if (esTu) art.appendChild(nodo('span', 'marca-tu', t('ficha.tu')));
     var c = nodo('div', 'ficha-cuerpo');
-    c.appendChild(nodo('div', 'ficha-num', '#' + m.numero + (m.fundador ? ' · Miembro fundador' : '')));
-    c.appendChild(nodo('div', 'ficha-nombre', m.nombre));
-    c.appendChild(nodo('div', 'ficha-carro', m.carro + ' · ' + m.color));
+    c.appendChild(nodo('div', 'ficha-num', '#' + m.numero + (m.fundador ? ' · ' + t('ficha.fundador') : '')));
+    c.appendChild(nodo('div', 'ficha-nombre' + (esTu ? ' plata' : ''), m.nombre));
+    c.appendChild(nodo('div', 'ficha-carro', m.carro + ' · ' + t('color.' + m.color)));
     var chips = nodo('div', 'chips');
-    (m.proteccion || []).forEach(function (p) { chips.appendChild(nodo('span', 'pill', p)); });
+    (m.proteccion || []).forEach(function (p) { chips.appendChild(nodo('span', 'pill', t('prot.' + p))); });
     c.appendChild(chips);
     art.appendChild(c);
     return art;
@@ -61,64 +64,94 @@
     });
   }
 
-  function bienvenida() {
-    var botones = document.querySelectorAll('[data-bc-elegir]');
-    if (!botones.length) return;
-    var caja = document.getElementById('alias-caja');
-    var input = document.getElementById('alias');
-    var mostrar = document.querySelector('[data-bc-mostrar-alias]');
-    var prev = document.querySelector('[data-bc="preview"]');
-    var prevNombre = null;
-    if (prev) {
-      var f = ficha(BC.yo, true);
-      prev.appendChild(f);
-      prevNombre = f.querySelector('.ficha-nombre');
+  /* El club recuerda que ya entraste: el logo te lleva a tu pasaporte y la
+     portada te saluda. Los controles no cambian de sitio. */
+  function casa() {
+    var e = eleccion();
+    if (!e) return;
+    document.querySelectorAll('.logo').forEach(function (a) { a.setAttribute('href', raiz + 'passport/'); });
+    var caja = document.querySelector('[data-bc="de-vuelta"]');
+    var txt = document.querySelector('[data-bc="de-vuelta-texto"]');
+    if (caja && txt) {
+      txt.textContent = t('devuelta', { n: BC.yo.nombreDePila });
+      caja.hidden = false;
     }
-    function nombrePrevio() {
-      if (!prevNombre) return;
-      var abierto = caja && !caja.hidden;
-      prevNombre.textContent = abierto ? (input.value.trim() || ('Miembro #' + BC.yo.numero)) : BC.yo.nombre;
-    }
-    if (mostrar && caja) {
-      mostrar.addEventListener('click', function () {
-        var abrir = caja.hidden;
-        caja.hidden = !abrir;
-        mostrar.setAttribute('aria-expanded', String(abrir));
-        if (abrir) input.focus();
-        nombrePrevio();
-      });
-    }
-    if (input) input.addEventListener('input', nombrePrevio);
-    botones.forEach(function (b) {
-      b.addEventListener('click', function () {
-        var modo = b.getAttribute('data-bc-elegir');
-        guardar(CLAVE, { modo: modo, alias: modo === 'alias' && input ? input.value.trim() : '' });
-        location.href = raiz + 'pasaporte/';
-      });
-    });
   }
 
-  function pasaporte() {
+  function saludo() {
+    var s = document.querySelector('[data-bc="saludo"]');
+    if (!s) return;
+    var h = new Date().getHours();
+    var k = h >= 5 && h < 12 ? 'saludo.m' : (h >= 12 && h < 19 ? 'saludo.t' : 'saludo.n');
+    s.textContent = t(k, { n: BC.yo.nombreDePila });
+    requestAnimationFrame(function () { s.classList.add('visible'); });
+  }
+
+  function comoApareces() {
     var span = document.querySelector('[data-bc="como-apareces"]');
     if (!span) return;
     var e = eleccion();
     var aviso = document.querySelector('[data-bc="sin-eleccion"]');
     if (!e) {
-      span.textContent = 'Sin elegir';
+      span.textContent = t('apareces.sin');
       if (aviso) aviso.hidden = false;
     } else if (e.modo === 'privado') {
-      span.textContent = 'Solo pasaporte, no apareces en el muro';
+      span.textContent = t('apareces.priv');
     } else {
       span.textContent = nombreVisible(e);
     }
+  }
 
+  /* Bienvenida: la vista previa se repinta con la lengua y con el alias */
+  var bienv = { caja: null, input: null, prevNombre: null };
+  function nombrePrevio() {
+    if (!bienv.prevNombre) return;
+    var abierto = bienv.caja && !bienv.caja.hidden;
+    bienv.prevNombre.textContent = abierto
+      ? (bienv.input.value.trim() || t('ficha.miembro', { n: BC.yo.numero }))
+      : BC.yo.nombre;
+  }
+  function pintarPrevia() {
+    var prev = document.querySelector('[data-bc="preview"]');
+    if (!prev) return;
+    prev.textContent = '';
+    var f = ficha(BC.yo, true);
+    prev.appendChild(f);
+    bienv.prevNombre = f.querySelector('.ficha-nombre');
+    nombrePrevio();
+  }
+  function bienvenida() {
+    var botones = document.querySelectorAll('[data-bc-elegir]');
+    if (!botones.length) return;
+    bienv.caja = document.getElementById('alias-caja');
+    bienv.input = document.getElementById('alias');
+    var mostrar = document.querySelector('[data-bc-mostrar-alias]');
+    if (mostrar && bienv.caja) {
+      mostrar.addEventListener('click', function () {
+        var abrir = bienv.caja.hidden;
+        bienv.caja.hidden = !abrir;
+        mostrar.setAttribute('aria-expanded', String(abrir));
+        if (abrir) bienv.input.focus();
+        nombrePrevio();
+      });
+    }
+    if (bienv.input) bienv.input.addEventListener('input', nombrePrevio);
+    botones.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var modo = b.getAttribute('data-bc-elegir');
+        guardar(CLAVE, { modo: modo, alias: modo === 'alias' && bienv.input ? bienv.input.value.trim() : '' });
+        location.href = raiz + 'passport/';
+      });
+    });
+  }
+
+  function pasaporte() {
     var sug = document.querySelector('[data-bc="sugerencia"]');
     var ocultar = document.querySelector('[data-bc="ocultar-sugerencias"]');
     if (sug && leer(CLAVE_SUG)) sug.hidden = true;
     if (sug && ocultar) {
       ocultar.addEventListener('click', function () { guardar(CLAVE_SUG, true); sug.hidden = true; });
     }
-
     var mapa = document.querySelector('[data-bc="mapa"]');
     if (!mapa) return;
     function activar(z) {
@@ -156,7 +189,16 @@
     cards.forEach(function (n) { obs.observe(n); });
   }
 
-  pintarMuro();
+  function textosDinamicos() {
+    pintarMuro();
+    casa();
+    saludo();
+    comoApareces();
+    pintarPrevia();
+  }
+
+  document.addEventListener('bc:idioma', textosDinamicos);
+  textosDinamicos();
   bienvenida();
   pasaporte();
   linterna();

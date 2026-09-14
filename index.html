@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0a0a0a">
 <title>Boutique Club | Tesla Boutique Miami</title>
-<meta name="description" content="Demo con datos ficticios del Boutique Club de Tesla Boutique Miami.">
+<meta name="description" content="Demo with fictitious data of the Boutique Club by Tesla Boutique Miami.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,90 +14,98 @@
 <link rel="stylesheet" href="assets/css/club.css">
 </head>
 <body data-raiz="">
-<div class="demo-bar"><strong>Demo con datos ficticios</strong> · Boutique Club es un nombre provisional</div>
+<div class="demo-bar"><strong data-i18n="demo.aviso">Demo with fictitious data</strong> · <span data-i18n="demo.nombre">Boutique Club is a working name</span></div>
 
 <header class="cab"><div class="container cab-inner">
-  <a class="logo" href="./" aria-label="Boutique Club, inicio"><span class="logo-main"><span class="logo-tesla">Tesla</span> <span class="logo-boutique">Boutique</span> <span class="logo-miami">Miami</span></span><span class="logo-sub">Boutique Club</span></a>
-  <nav class="nav" aria-label="Principal"><a href="./" aria-current="page">El club</a><a href="tarjeta/">Tarjeta</a><a href="pasaporte/">Mi pasaporte</a><a href="miembros/">Miembros</a></nav>
+  <a class="logo" href="./" aria-label="Boutique Club, home" data-i18n-attr="aria-label:a11y.inicio"><span class="logo-main"><span class="logo-tesla">Tesla</span> <span class="logo-boutique">Boutique</span> <span class="logo-miami">Miami</span></span><span class="logo-sub">Boutique Club</span></a>
+  <div class="cab-der">
+    <nav class="nav" aria-label="Main" data-i18n-attr="aria-label:a11y.principal"><a href="./" aria-current="page" data-i18n="nav.club">The club</a><a href="card/" data-i18n="nav.card">Card</a><a href="passport/" data-i18n="nav.passport">My passport</a><a href="members/" data-i18n="nav.members">Members</a></nav>
+    <div class="idioma" role="group" aria-label="Language" data-i18n-attr="aria-label:a11y.idioma"><button type="button" data-lang="en" aria-pressed="true">EN</button><button type="button" data-lang="es" aria-pressed="false">ES</button></div>
+  </div>
 </div></header>
 
 <main>
+<div class="container" data-bc="de-vuelta" hidden>
+  <div class="panel de-vuelta"><p data-bc="de-vuelta-texto"></p><a href="passport/" data-i18n="home.ir">Go to your passport</a></div>
+</div>
+
 <section class="hero">
   <div class="hero-bg" style="background-image:url('assets/img/model-y-lightblue-1-800.webp')"></div>
   <div class="container">
     <span class="tag">Boutique Club</span>
-    <h1 class="titulo">Cada Tesla que protegemos entra con <span class="azul">nombre propio</span>.</h1>
-    <p class="lead">El club de los dueños que cuidan su Tesla de verdad. Tu carnet es el pasaporte de tu carro: qué tiene, dónde, desde cuándo y cómo cuidarlo.</p>
+    <h1 class="titulo" data-i18n-html="home.h1">Every Tesla we protect is known <span class="azul">by name</span>.</h1>
+    <p class="lead" data-i18n="home.lead">The club for owners who truly care for their Tesla. Your membership card is your car's passport: what it has, where, since when, and how to care for it.</p>
     <div class="botones">
-      <a class="btn btn-primary" href="tarjeta/">Ver la tarjeta</a>
-      <a class="btn btn-outline" href="pasaporte/">Ver un pasaporte</a>
+      <a class="btn btn-primary" href="card/" data-i18n="home.verTarjeta">See the card</a>
+      <a class="btn btn-outline" href="passport/" data-i18n="home.verPasaporte">See a passport</a>
     </div>
   </div>
 </section>
 
 <section class="seccion"><div class="container">
   <div class="cabeza">
-    <span class="tag">Cómo se entra</span>
-    <h2 class="titulo-2">Nadie llena nada. Tu servicio es la entrada.</h2>
+    <span class="tag" data-i18n="home.comoTag">How you join</span>
+    <h2 class="titulo-2" data-i18n="home.comoH2">Nothing to fill out. Your service is your way in.</h2>
   </div>
   <div class="pasos">
-    <div class="panel paso"><h3 class="titulo-3">Hacemos el trabajo</h3><p class="texto">PPF, tintado, cerámico o lo que tu Tesla necesite, como siempre.</p></div>
-    <div class="panel paso"><h3 class="titulo-3">Tu factura crea el pasaporte</h3><p class="texto">Con el servicio, tu carro queda registrado: qué le pusimos, dónde y cuándo.</p></div>
-    <div class="panel paso"><h3 class="titulo-3">Recibes tu tarjeta</h3><p class="texto">Al recoger el carro te damos tu tarjeta del club. La escaneas con el teléfono y ya eres miembro, con tu número.</p></div>
+    <div class="panel paso"><h3 class="titulo-3" data-i18n="home.p1t">We do the work</h3><p class="texto" data-i18n="home.p1">PPF, tint, ceramic, or whatever your Tesla needs, as always.</p></div>
+    <div class="panel paso"><h3 class="titulo-3" data-i18n="home.p2t">Your invoice creates the passport</h3><p class="texto" data-i18n="home.p2">With the service, your car goes on record: what we installed, where and when.</p></div>
+    <div class="panel paso"><h3 class="titulo-3" data-i18n="home.p3t">You get your card</h3><p class="texto" data-i18n="home.p3">When you pick up your car, we hand you your club card. Scan it with your phone and you're a member, with your own number.</p></div>
   </div>
 </div></section>
 
 <section class="seccion seccion-alt"><div class="container">
   <div class="cabeza">
-    <span class="tag">Qué recibe el miembro</span>
-    <h2 class="titulo-2">Pertenecer, y saber lo que lleva tu carro.</h2>
+    <span class="tag" data-i18n="home.recTag">What members get</span>
+    <h2 class="titulo-2" data-i18n="home.recH2">Belonging, and knowing what your car has.</h2>
   </div>
   <div class="beneficios">
-    <div class="panel"><h3 class="titulo-3">Tu número de miembro</h3><p class="texto">Los primeros son miembros fundadores, y su número no se reasigna nunca.</p></div>
-    <div class="panel"><h3 class="titulo-3">El pasaporte de tu Tesla</h3><p class="texto">Todo lo que lleva tu carro, en tu teléfono. Va con el carro: si algún día lo vendes, el historial viaja con él.</p></div>
-    <div class="panel"><h3 class="titulo-3">Prioridad de reserva</h3><p class="texto">Cuando la agenda del taller se llena, los miembros van primero.</p></div>
-    <div class="panel"><h3 class="titulo-3">Recordatorios de cuidado</h3><p class="texto">Pocos y útiles, según lo que lleva tu carro. Nunca ofertas.</p></div>
+    <div class="panel"><h3 class="titulo-3" data-i18n="home.b1t">Your member number</h3><p class="texto" data-i18n="home.b1">The first members are founding members, and their number is never reassigned.</p></div>
+    <div class="panel"><h3 class="titulo-3" data-i18n="home.b2t">Your Tesla's passport</h3><p class="texto" data-i18n="home.b2">Everything your car has, on your phone. It stays with the car: if you ever sell it, the history goes with it.</p></div>
+    <div class="panel"><h3 class="titulo-3" data-i18n="home.b3t">Priority booking</h3><p class="texto" data-i18n="home.b3">When the shop's calendar fills up, members go first.</p></div>
+    <div class="panel"><h3 class="titulo-3" data-i18n="home.b4t">Care reminders</h3><p class="texto" data-i18n="home.b4">Few and useful, based on what your car has. Never promotions.</p></div>
   </div>
 </div></section>
 
 <section class="seccion"><div class="container">
   <div class="cabeza">
-    <span class="tag">Dentro del club</span>
-    <h2 class="titulo-2">Aquí nos conocemos por el nombre.</h2>
-    <p class="lead">Los miembros se ven entre ellos: quién es, qué Tesla tiene y cómo lo cuida. Cada uno decide cómo aparecer.</p>
+    <span class="tag" data-i18n="home.dentroTag">Inside the club</span>
+    <h2 class="titulo-2" data-i18n="home.dentroH2">In here, we know each other by name.</h2>
+    <p class="lead" data-i18n="home.dentroLead">Members can see each other: who they are, which Tesla they drive and how they care for it. Everyone chooses how they appear.</p>
   </div>
   <div class="panel privacidad" style="margin-bottom:24px">
     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-    <p class="texto"><strong>Fuera del club, nada.</strong> Nunca mostramos tu teléfono, tu correo, tu matrícula ni tu VIN.</p>
+    <p class="texto" data-i18n-html="home.fuera"><strong>Outside the club, nothing.</strong> We never show your phone, email, plate or VIN.</p>
   </div>
   <div class="muro" data-bc="muro" data-limite="4"></div>
-  <div class="botones" style="margin-top:24px"><a class="btn btn-outline" href="miembros/">Ver todos los miembros</a></div>
+  <div class="botones" style="margin-top:24px"><a class="btn btn-outline" href="members/" data-i18n="home.verMiembros">See all members</a></div>
 </div></section>
 
 <section class="seccion seccion-alt"><div class="container">
-  <span class="tag">Vívelo como un cliente</span>
-  <h2 class="titulo-2">Empieza por la tarjeta que recibe al recoger su carro.</h2>
+  <span class="tag" data-i18n="home.vivelo">Try it as a client</span>
+  <h2 class="titulo-2" data-i18n="home.viveloH2">Start with the card they get when picking up their car.</h2>
   <div class="botones" style="margin-top:20px">
-    <a class="btn btn-primary" href="tarjeta/">Ver la tarjeta</a>
-    <a class="btn btn-outline" href="bienvenida/">Ir a la bienvenida</a>
+    <a class="btn btn-primary" href="card/" data-i18n="home.verTarjeta">See the card</a>
+    <a class="btn btn-outline" href="welcome/" data-i18n="home.irBienvenida">Go to the welcome</a>
   </div>
 </div></section>
 </main>
 
 <footer class="pie"><div class="container">
   <div class="logo-main"><span class="logo-tesla">Tesla</span> <span class="logo-boutique">Boutique</span> <span class="logo-miami">Miami</span></div>
-  <p>Tesla Boutique Miami es un taller independiente, no afiliado a Tesla, Inc. XPEL Exclusive Dealer. 1835 NW 79th Ave, Doral, FL. Un servicio de Unlimited Wraps.</p>
-  <p>Demo con datos ficticios: los nombres de los miembros son inventados. Boutique Club es un nombre provisional.</p>
+  <p data-i18n="pie.legal">Tesla Boutique Miami is an independent shop, not affiliated with Tesla, Inc. XPEL Exclusive Dealer. 1835 NW 79th Ave, Doral, FL. A service by Unlimited Wraps.</p>
+  <p data-i18n="pie.demo">Demo with fictitious data: member names are made up. Boutique Club is a working name.</p>
 </div></footer>
 
-<nav class="tabbar" aria-label="Secciones">
-  <a href="./" aria-current="page"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linejoin="round" d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9L12 3z"/></svg>Club</a>
-  <a href="tarjeta/"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg>Tarjeta</a>
-  <a href="pasaporte/"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.6-4A12 12 0 0112 2.9 12 12 0 013.4 6 12 12 0 003 9c0 5.6 3.8 10.3 9 11.6 5.2-1.3 9-6 9-11.6 0-1-.1-2-.4-3z"/></svg>Pasaporte</a>
-  <a href="miembros/"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.4-1.9M17 20H7m10 0v-2c0-.7-.1-1.3-.4-1.9M7 20H2v-2a3 3 0 015.4-1.9M7 20v-2c0-.7.1-1.3.4-1.9m0 0a5 5 0 019.2 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Miembros</a>
+<nav class="tabbar" aria-label="Sections" data-i18n-attr="aria-label:a11y.secciones">
+  <a href="./" aria-current="page"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linejoin="round" d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9L12 3z"/></svg><span data-i18n="tab.club">Club</span></a>
+  <a href="card/"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg><span data-i18n="tab.card">Card</span></a>
+  <a href="passport/"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.6-4A12 12 0 0112 2.9 12 12 0 013.4 6 12 12 0 003 9c0 5.6 3.8 10.3 9 11.6 5.2-1.3 9-6 9-11.6 0-1-.1-2-.4-3z"/></svg><span data-i18n="tab.passport">Passport</span></a>
+  <a href="members/"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.4-1.9M17 20H7m10 0v-2c0-.7-.1-1.3-.4-1.9M7 20H2v-2a3 3 0 015.4-1.9M7 20v-2c0-.7.1-1.3.4-1.9m0 0a5 5 0 019.2 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg><span data-i18n="tab.members">Members</span></a>
 </nav>
 
 <script src="assets/js/datos.js"></script>
+<script src="assets/js/i18n.js"></script>
 <script src="assets/js/club.js"></script>
 </body>
 </html>

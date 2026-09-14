@@ -8,15 +8,19 @@ import sys
 from html.parser import HTMLParser
 
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
-PAGINAS = ["index.html", "tarjeta/index.html", "bienvenida/index.html",
-           "pasaporte/index.html", "miembros/index.html"]
+PAGINAS = ["index.html", "card/index.html", "welcome/index.html",
+           "passport/index.html", "members/index.html"]
+# Direcciones viejas (en español) que redirigen a las nuevas
+REDIRECCIONES = {"tarjeta": "card", "bienvenida": "welcome", "pasaporte": "passport", "miembros": "members"}
 VETADAS = [
     (re.compile("—"), "raya larga"),
     (re.compile(r"\bmaster\b", re.I), "'master' (regla del dueño: expert)"),
     (re.compile(r"\$\s?\d"), "precio"),
     (re.compile(r"de por vida|lifetime", re.I), "promesa de por vida"),
-    (re.compile(r"exclusiv\w* (para|de|for) Tesla", re.I), "XPEL exclusivo de Tesla"),
+    (re.compile(r"exclusiv\w* (para|de|for|to) Tesla", re.I), "XPEL exclusivo de Tesla"),
 ]
+CLAVES_USADAS = re.compile(r'data-i18n(?:-html)?="([\w.-]+)"')
+ATRIBUTOS_I18N = re.compile(r'data-i18n-attr="([^"]+)"')
 
 
 class Enlaces(HTMLParser):
@@ -38,8 +42,26 @@ class Enlaces(HTMLParser):
                 self.refs.append(v)
 
 
+def claves_de(txt):
+    claves = set(CLAVES_USADAS.findall(txt))
+    for grupo in ATRIBUTOS_I18N.findall(txt):
+        for par in grupo.split(";"):
+            if ":" in par:
+                claves.add(par.split(":", 1)[1].strip())
+    return claves
+
+
 def revisar():
     fallos = []
+    i18n = RAIZ / "assets/js/i18n.js"
+    i18n_txt = i18n.read_text(encoding="utf-8") if i18n.exists() else ""
+    definidas = set(re.findall(r"'([\w.-]+)'\s*:", i18n_txt))
+    if not i18n_txt:
+        fallos.append("falta assets/js/i18n.js")
+    for frase in ("no afiliado a Tesla, Inc.", "Demo con datos ficticios"):
+        if frase not in i18n_txt:
+            fallos.append(f"i18n.js: falta '{frase}' en español")
+
     for rel in PAGINAS:
         p = RAIZ / rel
         if not p.exists():
@@ -49,14 +71,14 @@ def revisar():
         for rx, motivo in VETADAS:
             if rx.search(txt):
                 fallos.append(f"{rel}: {motivo}")
-        if "Demo con datos ficticios" not in txt:
+        if "Demo with fictitious data" not in txt:
             fallos.append(f"{rel}: sin aviso de demo")
-        if "no afiliado a Tesla, Inc." not in txt:
+        if "not affiliated with Tesla, Inc." not in txt:
             fallos.append(f"{rel}: sin aviso de taller independiente")
         e = Enlaces()
         e.feed(txt)
-        if e.lang != "es":
-            fallos.append(f"{rel}: lang no es 'es'")
+        if e.lang != "en":
+            fallos.append(f"{rel}: lang no es 'en' (el inglés es la primera lengua)")
         if not e.meta_robots or "noindex" not in e.meta_robots:
             fallos.append(f"{rel}: sin noindex")
         for ref in e.refs:
@@ -65,7 +87,19 @@ def revisar():
                 destino = destino / "index.html"
             if not destino.exists():
                 fallos.append(f"{rel}: enlace roto {ref}")
-    for rel in ["assets/js/datos.js", "assets/js/club.js", "assets/css/club.css"]:
+        for clave in sorted(claves_de(txt) - definidas):
+            fallos.append(f"{rel}: sin traducción al español para '{clave}'")
+
+    for viejo, nuevo in REDIRECCIONES.items():
+        p = RAIZ / viejo / "index.html"
+        if not p.exists():
+            fallos.append(f"falta la redirección /{viejo}/")
+            continue
+        txt = p.read_text(encoding="utf-8")
+        if f"../{nuevo}/" not in txt or "noindex" not in txt:
+            fallos.append(f"/{viejo}/ no redirige bien a /{nuevo}/")
+
+    for rel in ["assets/js/datos.js", "assets/js/club.js", "assets/js/i18n.js", "assets/css/club.css"]:
         p = RAIZ / rel
         if not p.exists():
             fallos.append(f"falta {rel}")
@@ -76,10 +110,18 @@ def revisar():
                 fallos.append(f"{rel}: {motivo}")
     datos = RAIZ / "assets/js/datos.js"
     if datos.exists():
-        for img in re.findall(r"img/([\w.-]+\.webp)", datos.read_text(encoding="utf-8")):
+        dtxt = datos.read_text(encoding="utf-8")
+        for img in re.findall(r"img/([\w.-]+\.webp)", dtxt):
             if not (RAIZ / "assets/img" / img).exists():
                 fallos.append(f"datos.js: falta imagen {img}")
-    if not (RAIZ / "assets/img/qr-bienvenida.svg").exists():
+        for color in set(re.findall(r'color: "(\w+)"', dtxt)):
+            if f"'color.{color}'" not in i18n_txt:
+                fallos.append(f"datos.js: color '{color}' sin texto en i18n.js")
+        for grupo in re.findall(r"proteccion: \[([^\]]*)\]", dtxt):
+            for prot in re.findall(r'"(\w+)"', grupo):
+                if f"'prot.{prot}'" not in i18n_txt:
+                    fallos.append(f"datos.js: protección '{prot}' sin texto en i18n.js")
+    if not (RAIZ / "assets/img/qr-welcome.svg").exists():
         fallos.append("falta el QR")
     robots = RAIZ / "robots.txt"
     if not robots.exists() or "Disallow: /" not in robots.read_text(encoding="utf-8"):

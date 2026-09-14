@@ -9,7 +9,7 @@ Demostración del club de dueños de Tesla Boutique Miami: la tarjeta de bienven
 
 ## Estructura
 
-Sitio estático, sin dependencias: cinco páginas (`/`, `/tarjeta/`, `/bienvenida/`, `/pasaporte/`, `/miembros/`), una hoja de estilo, los datos ficticios en `assets/js/datos.js` y un script pequeño en `assets/js/club.js`.
+Sitio estático, sin dependencias: cinco páginas (`/`, `/card/`, `/welcome/`, `/passport/`, `/members/`), una hoja de estilo, los datos ficticios en `assets/js/datos.js`, los idiomas en `assets/js/i18n.js` (inglés primero, español segundo; el inglés vive en el HTML) y un script pequeño en `assets/js/club.js`. Las direcciones viejas en español (`/tarjeta/`, `/bienvenida/`, `/pasaporte/`, `/miembros/`) redirigen a las nuevas.
 
 ## Comprobar
 

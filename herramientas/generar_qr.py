@@ -8,7 +8,7 @@ import pathlib
 
 import segno
 
-URL = "https://cisnerosmusic.github.io/boutique-club-demo/bienvenida/"
-destino = pathlib.Path(__file__).resolve().parent.parent / "assets" / "img" / "qr-bienvenida.svg"
+URL = "https://cisnerosmusic.github.io/boutique-club-demo/welcome/"
+destino = pathlib.Path(__file__).resolve().parent.parent / "assets" / "img" / "qr-welcome.svg"
 segno.make(URL, error="m").save(str(destino), scale=6, border=2, dark="#0a0a0a", light="#ffffff")
 print("QR ->", destino)
