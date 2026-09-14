@@ -8,8 +8,8 @@ window.BC = {
     nombreDePila: "Carlos",
     carro: "Model Y",
     anio: "2025",
-    color: "gris",
-    foto: "assets/img/model-y-grey-1-800.webp",
+    color: "blanco",
+    foto: "assets/img/model-y-white-3-800.webp",
     desde: "septiembre de 2026",
     fundador: true,
     proteccion: ["Tintado", "Parabrisas"]
@@ -22,6 +22,6 @@ window.BC = {
     { numero: "005", nombre: "Luis F.", carro: "Model X", color: "rojo", foto: "assets/img/model-x-red-6-800.webp", fundador: true, proteccion: ["PPF frontal"] },
     { numero: "006", nombre: "Marisol T.", carro: "Model S", color: "azul", foto: "assets/img/model-s-blue-1-800.webp", fundador: true, proteccion: ["Tintado", "Cerámico"] },
     { numero: "008", nombre: "Rafael G.", carro: "Model 3", color: "rojo", foto: "assets/img/model-3-red-window-tint-1-800.webp", fundador: true, proteccion: ["Tintado"] },
-    { numero: "009", nombre: "Valeria C.", carro: "Model Y", color: "blanco", foto: "assets/img/model-y-white-1-800.webp", fundador: true, proteccion: ["Tintado", "Parabrisas"] }
+    { numero: "009", nombre: "Valeria C.", carro: "Model Y", color: "gris", foto: "assets/img/model-y-grey-2-800.webp", fundador: true, proteccion: ["Tintado", "Parabrisas"] }
   ]
 };
