@@ -302,7 +302,7 @@ img { max-width: 100%; height: auto; display: block; }
 .cuidados svg { width: 20px; height: 20px; color: var(--peri); margin-top: 3px; }
 .cuidados strong { color: var(--white); font-weight: 600; }
 
-.sugerencia { border-left: 3px solid var(--accent); }
+.sugerencia { border-color: rgba(147, 162, 236, 0.28); background: linear-gradient(180deg, rgba(43, 57, 144, 0.12) 0%, var(--black-light) 70%); }
 .lugar { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--line); border-radius: 12px; overflow: hidden; border: 1px solid var(--line); }
 .lugar div { background: var(--black-light); padding: 16px; }
 .lugar dt { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray); margin-bottom: 4px; }
