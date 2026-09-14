@@ -29,7 +29,7 @@ window.BC_I18N = {
     't.members': 'Miembros | Boutique Club · Tesla Boutique Miami',
 
     'home.ir': 'Ir a tu pasaporte',
-    'home.h1': 'Cada Tesla que protegemos entra con <span class="azul">nombre propio</span>.',
+    'home.h1': 'Cada Tesla que protegemos entra al <span class="azul">Club</span> con nombre propio.',
     'home.lead': 'El club de los dueños que cuidan su Tesla de verdad. Tu carnet es el pasaporte de tu carro: qué tiene, dónde, desde cuándo y cómo cuidarlo.',
     'home.verTarjeta': 'Ver la tarjeta',
     'home.verPasaporte': 'Ver un pasaporte',
