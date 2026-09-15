@@ -192,39 +192,87 @@
     });
   }
 
-  /* Tarjeta: se inclina hasta 6 grados con el ratón o al deslizar el dedo de lado
-     (el desplazamiento vertical sigue siendo de la página), y un reflejo sigue el ángulo. */
+  /* Tarjeta: se inclina hasta 6 grados con el ratón (tras 200 ms de hover) o al
+     deslizar el dedo de lado (lo vertical sigue siendo desplazamiento de la página).
+     Nada salta: el giro y el reflejo se acercan poco a poco a su destino, al entrar
+     y al salir, con la misma suavidad a 60 o a 120 fotogramas por segundo. */
   function inclinacion() {
     var reducido = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reducido) return;
-    var MAX = 6;
+    var MAX = 6;          // grados de inclinación máxima
+    var RETRASO = 200;    // ms de hover antes de empezar a moverse
+    var SUAVIDAD = 0.06;  // fracción del camino recorrida por fotograma a 60 fps
+    var BRILLO = 0.064;   // intensidad del reflejo (antes 0.16: un 60 % más suave)
     document.querySelectorAll('[data-bc="inclinable"]').forEach(function (el) {
       var carnet = el.querySelector('.carnet');
       var luz = el.querySelector('.carnet-luz');
       if (!carnet) return;
-      function mover(ev) {
+      var s = { rx: 0, ry: 0, ox: 0, oy: 0, gx: 50, gy: 50, ogx: 50, ogy: 50, activo: false, raf: 0, antes: 0, espera: 0, ultimo: null };
+
+      function paso(ahora) {
+        var dt = s.antes ? Math.min(64, ahora - s.antes) : 16.7;
+        s.antes = ahora;
+        var k = 1 - Math.pow(1 - SUAVIDAD, dt / 16.7);
+        s.rx += (s.ox - s.rx) * k;
+        s.ry += (s.oy - s.ry) * k;
+        s.gx += (s.ogx - s.gx) * k;
+        s.gy += (s.ogy - s.gy) * k;
+        carnet.style.transform = 'perspective(900px) rotateX(' + s.rx.toFixed(3) + 'deg) rotateY(' + s.ry.toFixed(3) + 'deg)';
+        if (luz) {
+          luz.style.background = 'radial-gradient(50% 70% at ' + s.gx.toFixed(1) + '% ' + s.gy.toFixed(1) +
+            '%, rgba(255, 255, 255, ' + BRILLO + '), rgba(255, 255, 255, 0) 70%)';
+        }
+        var quieto = Math.abs(s.ox - s.rx) < 0.005 && Math.abs(s.oy - s.ry) < 0.005;
+        if (quieto && !s.activo) {
+          carnet.style.transform = '';
+          s.raf = 0;
+          s.antes = 0;
+          return;
+        }
+        s.raf = requestAnimationFrame(paso);
+      }
+      function arrancar() { if (!s.raf) s.raf = requestAnimationFrame(paso); }
+      function apuntar(ev) {
         var r = carnet.getBoundingClientRect();
         var dx = Math.max(-0.5, Math.min(0.5, (ev.clientX - r.left) / r.width - 0.5));
         var dy = Math.max(-0.5, Math.min(0.5, (ev.clientY - r.top) / r.height - 0.5));
-        carnet.style.transform = 'perspective(900px) rotateX(' + (-dy * 2 * MAX).toFixed(2) + 'deg) rotateY(' + (dx * 2 * MAX).toFixed(2) + 'deg)';
-        if (luz) {
-          luz.style.background = 'radial-gradient(45% 65% at ' + ((dx + 0.5) * 100).toFixed(1) + '% ' + ((dy + 0.5) * 100).toFixed(1) +
-            '%, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 70%)';
-        }
+        s.ox = -dy * 2 * MAX;
+        s.oy = dx * 2 * MAX;
+        s.ogx = (dx + 0.5) * 100;
+        s.ogy = (dy + 0.5) * 100;
+      }
+      function activar() {
+        s.espera = 0;
+        s.activo = true;
+        el.classList.add('activo');
+        if (s.ultimo) apuntar(s.ultimo);
+        arrancar();
       }
       function soltar() {
+        clearTimeout(s.espera);
+        s.espera = 0;
+        s.activo = false;
         el.classList.remove('activo');
-        carnet.style.transform = '';
+        s.ox = 0;
+        s.oy = 0;
+        arrancar();
       }
+      el.addEventListener('pointerenter', function (ev) {
+        if (ev.pointerType === 'touch') return;
+        s.ultimo = ev;
+        clearTimeout(s.espera);
+        s.espera = setTimeout(activar, RETRASO);
+      });
       el.addEventListener('pointerdown', function (ev) {
-        if (ev.pointerType === 'touch') { el.classList.add('activo'); mover(ev); }
+        if (ev.pointerType === 'touch') { s.ultimo = ev; activar(); }
       });
       el.addEventListener('pointermove', function (ev) {
-        if (ev.pointerType === 'touch' && !el.classList.contains('activo')) return;
-        el.classList.add('activo');
-        mover(ev);
+        s.ultimo = ev;
+        if (s.activo) { apuntar(ev); arrancar(); }
       });
-      ['pointerleave', 'pointerup', 'pointercancel'].forEach(function (tipo) { el.addEventListener(tipo, soltar); });
+      el.addEventListener('pointerleave', soltar);
+      el.addEventListener('pointercancel', soltar);
+      el.addEventListener('pointerup', function (ev) { if (ev.pointerType === 'touch') soltar(); });
     });
   }
 

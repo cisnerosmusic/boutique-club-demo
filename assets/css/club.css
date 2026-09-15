@@ -405,13 +405,13 @@ html.dentro body {
    Una sola luz: en la tarjeta, el reflejo que sigue al ratón o al dedo sustituye
    a la linterna. El dedo inclina al deslizar de lado; lo vertical sigue siendo
    desplazamiento de la página. */
-.carnet { position: relative; isolation: isolate; transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1); }
+.carnet { position: relative; isolation: isolate; } /* el giro lo suaviza club.js fotograma a fotograma */
 [data-bc="inclinable"] { touch-action: pan-y; }
-[data-bc="inclinable"].activo .carnet { transition: none; will-change: transform; }
+[data-bc="inclinable"].activo .carnet { will-change: transform; }
 .carnet > * { position: relative; z-index: 3; }
 .carnet > .carnet-luz {
     position: absolute; inset: 0; z-index: 4; pointer-events: none; border-radius: inherit;
-    opacity: 0; transition: opacity 0.35s ease-out;
+    opacity: 0; transition: opacity 0.8s ease;
 }
 [data-bc="inclinable"].activo .carnet-luz { opacity: 1; }
 .carnets.con-trama .carnet::after {
