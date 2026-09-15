@@ -28,11 +28,12 @@
     <span class="tag" data-i18n="card.tag">The welcome card</span>
     <h1 class="titulo-2" data-i18n="card.h1">This is what the client gets when picking up their car.</h1>
     <p class="lead" data-i18n="card.lead">A printed card with their number. On the back, a code that opens their Tesla's passport.</p>
+    <p class="nota" style="margin-top:10px" data-i18n="card.mueve">Tilt it: the card responds to your finger or your mouse.</p>
   </div>
 
   <div class="carnets">
-    <div class="cara">
-      <div class="carnet beam-edge" data-beam-delay="400">
+    <div class="cara" data-bc="inclinable">
+      <div class="carnet">
         <div class="carnet-arriba">
           <img class="carnet-mono" src="../favicon.svg" alt="TB monogram of Tesla Boutique Miami" data-i18n-attr="alt:card.altMono">
           <div class="carnet-club">BOUTIQUE CLUB<small>TESLA BOUTIQUE MIAMI</small></div>
@@ -41,10 +42,11 @@
           <div><div class="carnet-rol" data-i18n="card.fundador">Founding member</div><div class="carnet-num plata">#007</div></div>
           <div class="carnet-carro">Model Y<br>2025</div>
         </div>
+        <span class="carnet-luz" aria-hidden="true"></span>
       </div>
       <p class="etiqueta-cara" data-i18n="card.anverso">Front</p>
     </div>
-    <div class="cara">
+    <div class="cara" data-bc="inclinable">
       <div class="carnet carnet-reverso">
         <div class="carnet-qr"><img src="../assets/img/qr-welcome.svg" alt="QR code that opens the club welcome" data-i18n-attr="alt:card.altQr"></div>
         <div class="carnet-texto">
@@ -52,11 +54,14 @@
           <div class="nota" data-i18n="card.escanea">Scan to see your Tesla's passport.</div>
           <div class="carnet-pie">Tesla Boutique Miami · Doral</div>
         </div>
+        <span class="carnet-luz" aria-hidden="true"></span>
       </div>
       <p class="etiqueta-cara" data-i18n="card.reverso">Back</p>
     </div>
   </div>
-  <p class="nota" style="text-align:center;margin-top:18px" data-i18n="card.medida">Standard bank card size: 85.60 × 53.98 mm (ISO/IEC 7810 ID-1).</p>
+  <p class="nota" style="text-align:center;margin-top:18px" data-i18n="card.emblemaNota">The mark in the center of the QR is the member's emblem: unique, generated from their number.</p>
+  <p class="nota" style="text-align:center;margin-top:6px" data-i18n="card.medida">Standard bank card size: 85.60 × 53.98 mm (ISO/IEC 7810 ID-1).</p>
+  <div class="trama-toggle"><button type="button" data-bc="trama" aria-pressed="true">Texture: on</button></div>
 
   <div class="panel" style="margin-top:32px">
     <h2 class="titulo-3" data-i18n="card.prueba">Try it</h2>
@@ -81,6 +86,7 @@
 
 <script src="../assets/js/datos.js"></script>
 <script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/emblema.js"></script>
 <script src="../assets/js/club.js"></script>
 </body>
 </html>

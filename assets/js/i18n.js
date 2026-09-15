@@ -75,6 +75,8 @@ window.BC_I18N = {
     'card.nota': 'En el club real, cada tarjeta lleva su propio enlace, único e imposible de adivinar.',
     'card.altMono': 'Monograma TB de Tesla Boutique Miami',
     'card.altQr': 'Código QR que abre la bienvenida al club',
+    'card.mueve': 'Muévela: la tarjeta responde a tu dedo o al ratón.',
+    'card.emblemaNota': 'La marca del centro del QR es el emblema del miembro: único, generado a partir de su número.',
 
     'wel.tag': 'Bienvenida',
     'wel.h1': 'Hola, Carlos. Tu Model Y ya tiene pasaporte.',
@@ -155,6 +157,8 @@ window.BC_I18N = {
     'pas.invit': 'Invitaciones',
     'pas.invitVal': '3 disponibles',
     'pas.cambiar': 'Cambiar cómo aparezco',
+    'pas.emblema': 'Tu emblema',
+    'pas.emblemaTxt': 'Único, generado a partir de tu número de miembro. También está en el centro del QR de tu tarjeta.',
 
     'mem.tag': 'Miembros',
     'mem.h1': 'Los que cuidan su Tesla.',
@@ -185,7 +189,10 @@ window.BC_I18N = {
       'prot.tint': 'Tint',
       'prot.windshield': 'Windshield',
       'prot.ceramic': 'Ceramic',
-      'prot.correction': 'Paint correction'
+      'prot.correction': 'Paint correction',
+      'trama.on': 'Texture: on',
+      'trama.off': 'Texture: off',
+      'emblema.de': 'Emblem of {nombre}'
     },
     es: {
       'saludo.m': 'Buenos días, {n}.',
@@ -209,7 +216,10 @@ window.BC_I18N = {
       'prot.tint': 'Tintado',
       'prot.windshield': 'Parabrisas',
       'prot.ceramic': 'Cerámico',
-      'prot.correction': 'Corrección de pintura'
+      'prot.correction': 'Corrección de pintura',
+      'trama.on': 'Textura: sí',
+      'trama.off': 'Textura: no',
+      'emblema.de': 'Emblema de {nombre}'
     }
   }
 };

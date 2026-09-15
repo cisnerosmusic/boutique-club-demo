@@ -2,15 +2,18 @@
    - La elección de cómo aparecer se guarda en este navegador (localStorage).
    - El muro, el saludo y los textos que dependen de la elección se pintan aquí,
      en la lengua activa (i18n.js), y se repintan al cambiar de lengua.
-   - El mapa del pasaporte resalta la zona tocada.
-   - La linterna del sitio se enciende al entrar en vista (solo en la puerta). */
+   - Cada miembro lleva su emblema único (emblema.js).
+   - La tarjeta se inclina con el ratón o el dedo, con un reflejo que sigue el ángulo.
+   - El mapa del pasaporte resalta la zona tocada. */
 (function () {
   'use strict';
   var CLAVE = 'bc-demo-eleccion';
   var CLAVE_SUG = 'bc-demo-sin-sugerencias';
+  var CLAVE_TRAMA = 'bc-demo-trama';
   var raiz = document.body.getAttribute('data-raiz') || '';
   var BC = window.BC || { yo: {}, miembros: [] };
   var L = window.BC_LANG || { t: function (k) { return k; } };
+  var E = window.BC_EMBLEMA || null;
   function t(k, v) { return L.t(k, v); }
 
   function leer(clave) {
@@ -32,6 +35,9 @@
     if (texto != null) n.textContent = texto;
     return n;
   }
+  function emblemaDe(numero, nombre) {
+    return E ? E.svg(parseInt(numero, 10), t('emblema.de', { nombre: nombre })) : '';
+  }
 
   function ficha(m, esTu) {
     var art = nodo('article', 'ficha' + (esTu ? ' es-tu brillo' : ''));
@@ -42,8 +48,15 @@
     art.appendChild(img);
     if (esTu) art.appendChild(nodo('span', 'marca-tu', t('ficha.tu')));
     var c = nodo('div', 'ficha-cuerpo');
-    c.appendChild(nodo('div', 'ficha-num', '#' + m.numero + (m.fundador ? ' · ' + t('ficha.fundador') : '')));
-    c.appendChild(nodo('div', 'ficha-nombre' + (esTu ? ' plata' : ''), m.nombre));
+    var id = nodo('div', 'ficha-id');
+    var em = nodo('div', 'ficha-emblema');
+    em.innerHTML = emblemaDe(m.numero, m.nombre);
+    var quien = nodo('div');
+    quien.appendChild(nodo('div', 'ficha-num', '#' + m.numero + (m.fundador ? ' · ' + t('ficha.fundador') : '')));
+    quien.appendChild(nodo('div', 'ficha-nombre' + (esTu ? ' plata' : ''), m.nombre));
+    id.appendChild(em);
+    id.appendChild(quien);
+    c.appendChild(id);
     c.appendChild(nodo('div', 'ficha-carro', m.carro + ' · ' + t('color.' + m.color)));
     var chips = nodo('div', 'chips');
     (m.proteccion || []).forEach(function (p) { chips.appendChild(nodo('span', 'pill', t('prot.' + p))); });
@@ -100,6 +113,11 @@
     } else {
       span.textContent = nombreVisible(e);
     }
+  }
+
+  function emblemaYo() {
+    var c = document.querySelector('[data-bc="emblema-yo"]');
+    if (c) c.innerHTML = emblemaDe(BC.yo.numero, BC.yo.nombre);
   }
 
   /* Bienvenida: la vista previa se repinta con la lengua y con el alias */
@@ -174,6 +192,62 @@
     });
   }
 
+  /* Tarjeta: se inclina hasta 6 grados con el ratón o al deslizar el dedo de lado
+     (el desplazamiento vertical sigue siendo de la página), y un reflejo sigue el ángulo. */
+  function inclinacion() {
+    var reducido = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reducido) return;
+    var MAX = 6;
+    document.querySelectorAll('[data-bc="inclinable"]').forEach(function (el) {
+      var carnet = el.querySelector('.carnet');
+      var luz = el.querySelector('.carnet-luz');
+      if (!carnet) return;
+      function mover(ev) {
+        var r = carnet.getBoundingClientRect();
+        var dx = Math.max(-0.5, Math.min(0.5, (ev.clientX - r.left) / r.width - 0.5));
+        var dy = Math.max(-0.5, Math.min(0.5, (ev.clientY - r.top) / r.height - 0.5));
+        carnet.style.transform = 'perspective(900px) rotateX(' + (-dy * 2 * MAX).toFixed(2) + 'deg) rotateY(' + (dx * 2 * MAX).toFixed(2) + 'deg)';
+        if (luz) {
+          luz.style.background = 'radial-gradient(45% 65% at ' + ((dx + 0.5) * 100).toFixed(1) + '% ' + ((dy + 0.5) * 100).toFixed(1) +
+            '%, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 70%)';
+        }
+      }
+      function soltar() {
+        el.classList.remove('activo');
+        carnet.style.transform = '';
+      }
+      el.addEventListener('pointerdown', function (ev) {
+        if (ev.pointerType === 'touch') { el.classList.add('activo'); mover(ev); }
+      });
+      el.addEventListener('pointermove', function (ev) {
+        if (ev.pointerType === 'touch' && !el.classList.contains('activo')) return;
+        el.classList.add('activo');
+        mover(ev);
+      });
+      ['pointerleave', 'pointerup', 'pointercancel'].forEach(function (tipo) { el.addEventListener(tipo, soltar); });
+    });
+  }
+
+  /* Experimento: trama de grano sobre la tarjeta, con interruptor (se recuerda) */
+  function trama() {
+    var b = document.querySelector('[data-bc="trama"]');
+    var cont = document.querySelector('.carnets');
+    if (!b || !cont) return;
+    var v = leer(CLAVE_TRAMA);
+    var on = v === null ? true : !!v;
+    cont.classList.toggle('con-trama', on);
+    b.setAttribute('aria-pressed', String(on));
+    b.textContent = t(on ? 'trama.on' : 'trama.off');
+    if (!b.__listo) {
+      b.__listo = true;
+      b.addEventListener('click', function () {
+        var ahora = !cont.classList.contains('con-trama');
+        guardar(CLAVE_TRAMA, ahora);
+        trama();
+      });
+    }
+  }
+
   function linterna() {
     var cards = document.querySelectorAll('.beam-edge');
     if (!cards.length) return;
@@ -194,12 +268,15 @@
     casa();
     saludo();
     comoApareces();
+    emblemaYo();
     pintarPrevia();
+    trama();
   }
 
   document.addEventListener('bc:idioma', textosDinamicos);
   textosDinamicos();
   bienvenida();
   pasaporte();
+  inclinacion();
   linterna();
 })();
